@@ -1,9 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace PersonalCodeApi
 {
     public class PersonalCode
     {
-       
-        public int id { get; set; }
+        [Key]
         public string? Code { get; set; }
         public string? ErrorMessage { get; set; }
     }
