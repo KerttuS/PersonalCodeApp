@@ -12,7 +12,7 @@ namespace PersonalCodeApi.Controllers
         }
         private readonly DataContext _context;
 
-
+        [RequireHttps]
         [HttpGet]
         public async Task<ActionResult<List<PersonalCode>>> Get()
         {
@@ -31,17 +31,15 @@ namespace PersonalCodeApi.Controllers
             data.Code = personCode.Code;
             data.ErrorMessage = personCode.ErrorMessage;
 
-            bool isValid = IsCodeValid(data.Code);
-
-            if (!isValid)
+            var checkedCode = CheckCodeValidity(data.Code);
+            
+            if (checkedCode == null)
             {
                 return BadRequest();
-                
             }
             else
             {
-
-                _context.PersonalCodes.Add(personCode);
+                _context.PersonalCodes.Add(checkedCode);
                 await _context.SaveChangesAsync();
 
                 return Ok(await _context.PersonalCodes.ToListAsync());
@@ -49,55 +47,49 @@ namespace PersonalCodeApi.Controllers
 
 
         }
-        private bool IsCodeValid(string inputCode)
+        private static PersonalCode CheckCodeValidity(string inputCode)
         {
+            var codeErrorResult = new PersonalCode();
 
             if (string.IsNullOrEmpty(inputCode))
             {
-                return false;
-               
+               codeErrorResult.ErrorMessage = "Kood on puudu";
+
             }
             else
             {
                 char[]? codeToCheck = inputCode.ToCharArray();
-                Console.WriteLine("Kood: " + inputCode);
                 var sex = Convert.ToInt32(inputCode.Substring(0, 1));
                 var month = Convert.ToInt32(inputCode.Substring(3, 2));
                 var day = Convert.ToInt32(inputCode.Substring(5, 2));
                 var checkSum = Convert.ToInt32(inputCode.Substring(10, 1));
 
-                if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && checkSum == getCheckSum(Convert.ToInt64(inputCode)))
-                {
-                    return true;
-                    Console.WriteLine("Sugu on õige");
+                if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && checkSum == getCheckSum(codeToCheck))
+                {  
+                    codeErrorResult.ErrorMessage = "Kood on õige";
+                    codeErrorResult.Code = inputCode;
                 }
-
                 else
-                {
-                    return false;
-                  
+                {     
+                    codeErrorResult.ErrorMessage = "Vale number isikukoodi jaoks" + inputCode;
+                    codeErrorResult.Code = inputCode;
                 }
             }
+            return codeErrorResult;   
+            
         }
 
-        private static int getCheckSum(Int64 code)
+        private static int getCheckSum(char[] code)
         {
-            List<int>? weight1 = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 1 };
-            List<int> weight2 = new List<int>() { 3, 4, 5, 6, 7, 8, 9, 1, 2, 3 };
+            List<int> weight = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 1 };
+            
+            int[] codeSequence = code.Select(c => Convert.ToInt32(c.ToString())).ToArray();
 
-            int controlSum = code.ToString()[0] * 1 +
-                code.ToString()[1] * 2 +
-                code.ToString()[2] * 3 +
-                code.ToString()[3] * 4 +
-                code.ToString()[4] * 5 +
-                code.ToString()[5] * 6 +
-                code.ToString()[6] * 7 +
-                code.ToString()[7] * 8 +
-                code.ToString()[8] * 9 +
-                code.ToString()[9] * 1;  
-               
+            IEnumerable<int>? calculateWeight = (weight.Select((x, index) => x * codeSequence[index]));
+            
+            int controlSum = calculateWeight.Sum();
+   
             int sum = controlSum % 11;
-
 
             return sum;
         }
