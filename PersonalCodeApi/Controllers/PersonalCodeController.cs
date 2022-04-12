@@ -16,22 +16,28 @@ namespace PersonalCodeApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PersonalCode>>> Get()
         {
-
-            return Ok(await _context.PersonalCodes.ToListAsync());
+            try
+            {
+                return Ok(await _context.PersonalCodes.ToListAsync());
+            }
+            catch
+            {
+                return BadRequest();
+            }
+            
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<PersonalCode>>> ValidateCode(PersonalCode personCode)
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult<List<PersonalCode>>> ValidateCode(string personCode)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-            var data = new PersonalCode();
-            data.Code = personCode.Code;
-            data.ErrorMessage = personCode.ErrorMessage;
-
-            var checkedCode = CheckCodeValidity(data.Code);
+           
+            PersonalCode checkedCode = CheckCodeValidity(personCode);
             
             if (checkedCode == null)
             {
@@ -53,8 +59,7 @@ namespace PersonalCodeApi.Controllers
 
             if (string.IsNullOrEmpty(inputCode))
             {
-               codeErrorResult.ErrorMessage = "Kood on puudu";
-
+                throw new ArgumentNullException("Code");
             }
             else
             {
@@ -71,7 +76,7 @@ namespace PersonalCodeApi.Controllers
                 }
                 else
                 {     
-                    codeErrorResult.ErrorMessage = "Vale number isikukoodi jaoks" + inputCode;
+                    codeErrorResult.ErrorMessage = "Sellist isikukoodi ei eksisteeri";
                     codeErrorResult.Code = inputCode;
                 }
             }
