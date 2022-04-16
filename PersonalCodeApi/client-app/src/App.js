@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
-import Header from './components/Header'
 import ValidationList from './components/ValidationList'
 import UserInput from './components/UserInput'
 
 
+
 const App = () => {
     const [list, setList] = useState([])
+    const [code, setCode] = useState(null)
+    const [enabled, setEnabled] = useState(false)
 
     useEffect(() => {
         const getCodes = async () => {
@@ -17,43 +19,40 @@ const App = () => {
     }, [])
 
 
-    // fetch data
+     //fetch data from Server
     const fetchCodes = async () => {
         const res = await fetch('https://localhost:7090/api/personalcode')
         const data = await res.json()
-
+        console.log("See on serverist info", data)
         return data
     }
 
-    //CheckCode function
-    const checkCode = async (list) => {
+    //Validate personal code 
+    const checkCode = async (code) => {
+        console.log("Kood checkCode seest", code)
         const res = await fetch('https://localhost:7090/api/personalcode', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/json'
             },
-            body: JSON.stringify(list),
+            body: JSON.stringify(code),
         })
 
         const data = await res.json()
+       
+        setCode(code, data)
+        console.log("data on meil", data)
+    }
 
-        setList([...list, data])
-
-        }
     return (
        
         <div className="container">
-            <Header />
+          
             <UserInput onAdd={checkCode} />
             <ValidationList list={list} />
         </div>
           
-       
-    )
- }
+       )
+}
 
-    
-
-
-
-export default App;
+export default App

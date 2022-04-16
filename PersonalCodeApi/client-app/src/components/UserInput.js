@@ -1,38 +1,42 @@
 ﻿import { useState } from 'react'
 
-const UserInput = ({onAdd}) => {
+const UserInput = ({ onAdd, btnList }) => {
     const [code, setCode] = useState('')
-    const [errorMsg, setErrorMsg] = useState('')
-
-    const onSubmit = (e) => {
+   
+    const handleSubmit = (e) => {
+        console.log(code)
         e.preventDefault()
-
         if (!code) {
-            alert('Palun sisesta kood')
+            alert("Midagi juhtus")
             return
         }
-     
         onAdd({ code })
         setCode('')
     }
-    //Ära sisesta muud kui täisarvu
-    const onChange = (e) => {
-        e.preventDefault()
-        const re = /^[0-9\b]+$/;
-
-        if (e.target.value === '' || re.test(e.target.value)) {
-            setCode({ code: e.target.value });
-
-        }
-    }
+    
     return (
-        <form className='add-form' onSubmit={onSubmit}>
-            <div className='form-control'>
+        <>
+            <form className='add-form' onSubmit={handleSubmit} >
+            <div className='form-control' >
                 <label>Isikukood</label>
-                <input type='text' placeholder='Sisesta isikukood' value={code} onChange={onChange} />
-            </div>
-            <input type='submit' value='Kontrolli' className='btn btn-block' />
+                <input
+                    type='text'
+                    placeholder='Sisesta isikukood'
+                    value={code}
+                    pattern='[0-9]*'
+                    maxLength='11'
+                    onChange={(e) => {
+                        setCode((v) => (e.target.validity.valid ? e.target.value : v))
+                    }} />
+           
+                </div>
+                <button disabled={code.length < 11} type='submit' className='btn btn-block' value='Kontrolli'>Kontrolli</button>
         </form>
+
+            <div>
+                <button className='btn btn-block' text='Vaata valideerimisi' onClick={btnList}>Isikukoodi kontrolli tulemused</button>
+            </div>
+            </>
         )
 }
 

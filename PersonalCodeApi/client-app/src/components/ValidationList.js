@@ -1,14 +1,17 @@
-﻿const ValidateList = ({list}) => {
+﻿
 
+const ValidateList = ({ list }) => {
+    
     return (
-    <>
-        {list.map((list) => (
-        <h3 key={list.id}>{list.code}</h3>
-
-        ))}
-     </>
+        <ul>
+            {list.map(item => (
+                <li key={item.code}>
+                    <p>{item.code}</p>
+                    <p>{item.errorMessage}</p>
+                </li>
+            ))}
+        </ul>
     )
 }
-
 export default ValidateList
 

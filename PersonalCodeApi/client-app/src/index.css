@@ -29,8 +29,6 @@ body {
 
 .btn {
     display: inline-block;
-    background: #000;
-    color: #fff;
     border: none;
     padding: 10px 20px;
     margin: 5px;
@@ -44,6 +42,7 @@ body {
     .btn:focus {
         outline: none;
     }
+ 
 
     .btn:active {
         transform: scale(0.98);
