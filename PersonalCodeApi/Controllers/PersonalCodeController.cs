@@ -43,11 +43,10 @@ namespace PersonalCodeApi.Controllers
                 await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(Get), new { personalCode = checkCodeIsValid}, personalCode);
             }
-            catch (Exception ex)
+            catch
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data");
             }
-            
             
         }
 
@@ -55,22 +54,26 @@ namespace PersonalCodeApi.Controllers
         private static PersonalCode CheckCodeValidity(PersonalCode inputCode)
         {
             inputCode.ErrorMessage = "";
-            var code = inputCode.Code;
+            string? code = inputCode.Code;
 
             if (string.IsNullOrEmpty(code))
             {
-                throw new ArgumentNullException("Kood on puudu või vale");
+                throw new ArgumentNullException(inputCode.ErrorMessage = "Kood on puudu või vale");
+                
             }
             else
             {
                 char[]? codeToCheck = code.ToCharArray();
-                var sex = Convert.ToInt32(code.Substring(0, 1));
-                var month = Convert.ToInt32(code.Substring(3, 2));
-                var day = Convert.ToInt32(code.Substring(5, 2));
-                var checkSum = Convert.ToInt32(code.Substring(10, 1));
-                var lastNum = getCheckSum(codeToCheck);
+                int sex = Convert.ToInt32(code.Substring(0, 1));
+                int month = Convert.ToInt32(code.Substring(3, 2));
+                int day = Convert.ToInt32(code.Substring(5, 2));
+                int lastNum = Convert.ToInt32(code.Substring(10, 1));
 
-                if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && checkSum == lastNum[0] || checkSum == lastNum[1])
+
+                int checkSum = getCheckSum(codeToCheck);
+
+
+                if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && lastNum == checkSum)
                 {
                     inputCode.ErrorMessage = "Kood on õige";
                 
@@ -85,27 +88,35 @@ namespace PersonalCodeApi.Controllers
 
         }
 
-        private static List<int> getCheckSum(char[] code)
+        private static int getCheckSum(char[] code)
         {
             List<int> weight = new List<int>() { 1, 2, 3, 4, 5, 6, 7, 8, 9, 1 };
             List<int> weight2 = new List<int>() { 3, 4, 5, 6, 7, 8, 9, 1, 2, 3 };
-            List<int> sum = new List<int>() { };
-
             int[] codeSequence = code.Select(c => Convert.ToInt32(c.ToString())).ToArray();
 
             IEnumerable<int>? calculatedWeight1 = (weight.Select((x, index) => x * codeSequence[index]));
-            IEnumerable<int>? calculatedWeight2 = (weight2.Select((x, index) => x * codeSequence[index]));
-
             int controlSum1 = calculatedWeight1.Sum();
-            int controlSum2 = calculatedWeight2.Sum();
-
             int sum1 = controlSum1 % 11;
-            sum.Add(sum1);
-            int sum2 = controlSum2 % 11;
-            sum.Add(sum2);
             
+            if (sum1 == 10)
+            {
+                IEnumerable<int>? calculatedWeight2 = (weight2.Select((x, index) => x * codeSequence[index]));
+                int controlSum2 = calculatedWeight2.Sum();
+                int sum2 = controlSum2 % 11;
+              
+                
+                if (sum2 == 10)
+                {
+                    sum2 = 0;
+                }
+                return sum2;
+            }
+            else
+            {
+                return sum1;
+            }
+           
 
-            return sum;
         }
     }
 }

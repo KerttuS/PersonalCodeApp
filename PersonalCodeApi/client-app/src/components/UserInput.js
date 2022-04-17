@@ -1,6 +1,6 @@
 ﻿import { useState } from 'react'
 
-const UserInput = ({ onAdd, btnList }) => {
+const UserInput = ({ onAdd }) => {
     const [code, setCode] = useState('')
    
     const handleSubmit = (e) => {
@@ -34,7 +34,7 @@ const UserInput = ({ onAdd, btnList }) => {
         </form>
 
             <div>
-                <button className='btn btn-block' text='Vaata valideerimisi' onClick={btnList}>Isikukoodi kontrolli tulemused</button>
+                <span className='span' text='Vaata valideerimisi'>Isikukoodi kontrolli tulemused</span>
             </div>
             </>
         )

@@ -3,11 +3,9 @@ import ValidationList from './components/ValidationList'
 import UserInput from './components/UserInput'
 
 
-
 const App = () => {
     const [list, setList] = useState([])
-    const [code, setCode] = useState(null)
-    const [enabled, setEnabled] = useState(false)
+    const [code, setCode] = useState('')
 
     useEffect(() => {
         const getCodes = async () => {
@@ -29,7 +27,7 @@ const App = () => {
 
     //Validate personal code 
     const checkCode = async (code) => {
-        console.log("Kood checkCode seest", code)
+       
         const res = await fetch('https://localhost:7090/api/personalcode', {
             method: 'POST',
             headers: {
@@ -39,15 +37,14 @@ const App = () => {
         })
 
         const data = await res.json()
-       
+
         setCode(code, data)
-        console.log("data on meil", data)
+        
     }
 
     return (
        
         <div className="container">
-          
             <UserInput onAdd={checkCode} />
             <ValidationList list={list} />
         </div>
