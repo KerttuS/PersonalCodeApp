@@ -31,7 +31,7 @@ namespace PersonalCodeTests
 
             _dataContextMock.Setup(repo => repo.Set<PersonalCode>());
 
-            var result = _controller.GetAll();
+            var result = _controller.Get();
             Assert.NotNull(result);
 
         }
@@ -48,18 +48,19 @@ namespace PersonalCodeTests
             _dataContextMock.Setup(repo => repo.Set<PersonalCode>());
             new Mock<DataContext>(new Mock<PersonalCode>().Object);
 
-            var result = _controller.PostCode(personalCode.Code);
+            var result = _controller.PostCode(personalCode);
             Assert.NotNull(result);
             Assert.Equal(personalCode.ErrorMessage = "Kood on õige", (IEnumerable<char>)result);
         }
         [Fact]
         public void PesonalCodeNull_ReturnBadRequest()
         {
-            string code = "";
+            PersonalCode persCode = new PersonalCode();
+            persCode.Code = "string>null;";
 
-            var result = _controller.PostCode(code);
+            var result = _controller.PostCode(persCode);
 
-            Assert.NotNull(result);
+            Assert.Null(result);
 
         }
 

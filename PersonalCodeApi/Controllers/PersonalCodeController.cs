@@ -16,6 +16,7 @@ namespace PersonalCodeApi.Controllers
         [HttpGet]
         public async Task<ActionResult<List<PersonalCode>>> Get()
         {
+            
             try
             {
                 return Ok(await _context.PersonalCodes.ToListAsync());
@@ -39,8 +40,8 @@ namespace PersonalCodeApi.Controllers
                 PersonalCode? checkCodeIsValid = CheckCodeValidity(personalCode);
 
                  _context.PersonalCodes.Add(checkCodeIsValid);
+                 await _context.SaveChangesAsync();
 
-                await _context.SaveChangesAsync();
                 return CreatedAtAction(nameof(Get), new { personalCode = checkCodeIsValid}, personalCode);
             }
             catch
@@ -103,7 +104,7 @@ namespace PersonalCodeApi.Controllers
                 IEnumerable<int>? calculatedWeight2 = (weight2.Select((x, index) => x * codeSequence[index]));
                 int controlSum2 = calculatedWeight2.Sum();
                 int sum2 = controlSum2 % 11;
-              
+            
                 
                 if (sum2 == 10)
                 {
