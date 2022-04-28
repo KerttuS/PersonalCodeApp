@@ -55,16 +55,15 @@ namespace PersonalCodeApi.Controllers
 
         private static String ValidationResultMessage(string inputCode)
         {
-            if (inputCode.Length == 11)
+            string? message = "";
+
+            if (string.IsNullOrEmpty(inputCode))
             {
-                string? message = "";
-
-                if (string.IsNullOrEmpty(inputCode))
-                {
-                    throw new ArgumentNullException(message = "Kood on puudu või vale");
-
-                }
-                else
+                throw new ArgumentNullException();
+            }
+            else
+            {
+                if (inputCode.Length == 11)
                 {
                     char[]? codeToCheck = inputCode.ToCharArray();
                     int sex = Convert.ToInt32(inputCode.Substring(0, 1));
@@ -72,9 +71,7 @@ namespace PersonalCodeApi.Controllers
                     int day = Convert.ToInt32(inputCode.Substring(5, 2));
                     int lastNum = Convert.ToInt32(inputCode.Substring(10, 1));
 
-
                     int checkSum = getCheckSum(codeToCheck);
-
 
                     if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && lastNum == checkSum)
                     {
@@ -86,10 +83,14 @@ namespace PersonalCodeApi.Controllers
                         message = "Sisestatud isikukood on vale!";
 
                     }
+                    return message;
                 }
-                return message;
+                else
+                {
+                    return "Sisestatud isikukoodi pikkus on vale";
+                }
+                
             }
-            return "Sisestatud isikukoodi pikkus on vale";
 
         }
 
