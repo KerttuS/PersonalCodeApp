@@ -5,7 +5,7 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalCodeApi", "PersonalCodeApi.csproj", "{5AB7A916-CDBB-4408-AE85-99F042B88CB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersonalCodeTests", "..\PersonalCodeTests\PersonalCodeTests.csproj", "{75F5041F-E2FE-4014-AF82-CB4CB54C61D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PersonalCodeTests", "..\PersonalCodeTests\PersonalCodeTests.csproj", "{75F5041F-E2FE-4014-AF82-CB4CB54C61D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

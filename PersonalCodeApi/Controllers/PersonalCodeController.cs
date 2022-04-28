@@ -6,43 +6,44 @@ namespace PersonalCodeApi.Controllers
     [Route("api/[controller]")]
     public class PersonalCodeController : ControllerBase
     {
-        public PersonalCodeController(DataContext context)
+
+        private readonly IDataContext _context;
+        public PersonalCodeController(IDataContext context)
         {
             _context = context;
         }
-        private readonly DataContext _context;
 
         [RequireHttps]
         [HttpGet]
-        public async Task<ActionResult<List<PersonalCode>>> Get()
+        public async Task<ActionResult<IEnumerable<PersonalCode>>> GetAll()
+        {
+            return await _context.PersonalCode.ToListAsync();
+        }
+
+        
+        [HttpPost]
+        public async Task<ActionResult> PostCode(string personalCode)
         {
             
-            try
-            {
-                return Ok(await _context.PersonalCodes.ToListAsync());
-            }
-            catch
-            {
-                return BadRequest();
-            }
-
-        }
-        [HttpPost]
-        public async Task<ActionResult<PersonalCode>> PostCode(PersonalCode personalCode)
-        {
             try
             {
                 if (personalCode == null)
                 {
                     return NotFound();
                 }
+                else
+                {
+                    string? message = ValidationResultMessage(personalCode);
+                    PersonalCode personalCodeDb = new PersonalCode(); 
+                    personalCodeDb.Code = personalCode; 
+                    personalCodeDb.Message = message;
+                    
+                    _context.Add(personalCodeDb);
+                    await _context.SaveChangesAsync();
 
-                PersonalCode? checkCodeIsValid = CheckCodeValidity(personalCode);
-
-                 _context.PersonalCodes.Add(checkCodeIsValid);
-                 await _context.SaveChangesAsync();
-
-                return CreatedAtAction(nameof(Get), new { personalCode = checkCodeIsValid}, personalCode);
+                    return CreatedAtAction("GetAll", new { id = personalCodeDb.Code }, message);
+                }
+               
             }
             catch
             {
@@ -52,40 +53,43 @@ namespace PersonalCodeApi.Controllers
         }
 
 
-        private static PersonalCode CheckCodeValidity(PersonalCode inputCode)
+        private static String ValidationResultMessage(string inputCode)
         {
-            inputCode.ErrorMessage = "";
-            string? code = inputCode.Code;
-
-            if (string.IsNullOrEmpty(code))
+            if (inputCode.Length == 11)
             {
-                throw new ArgumentNullException(inputCode.ErrorMessage = "Kood on puudu või vale");
-                
-            }
-            else
-            {
-                char[]? codeToCheck = code.ToCharArray();
-                int sex = Convert.ToInt32(code.Substring(0, 1));
-                int month = Convert.ToInt32(code.Substring(3, 2));
-                int day = Convert.ToInt32(code.Substring(5, 2));
-                int lastNum = Convert.ToInt32(code.Substring(10, 1));
+                string? message = "";
 
-
-                int checkSum = getCheckSum(codeToCheck);
-
-
-                if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && lastNum == checkSum)
+                if (string.IsNullOrEmpty(inputCode))
                 {
-                    inputCode.ErrorMessage = "Kood on õige";
-                
+                    throw new ArgumentNullException(message = "Kood on puudu või vale");
+
                 }
                 else
                 {
-                    inputCode.ErrorMessage = "Sellist isikukoodi ei eksisteeri";
-                    
+                    char[]? codeToCheck = inputCode.ToCharArray();
+                    int sex = Convert.ToInt32(inputCode.Substring(0, 1));
+                    int month = Convert.ToInt32(inputCode.Substring(3, 2));
+                    int day = Convert.ToInt32(inputCode.Substring(5, 2));
+                    int lastNum = Convert.ToInt32(inputCode.Substring(10, 1));
+
+
+                    int checkSum = getCheckSum(codeToCheck);
+
+
+                    if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && lastNum == checkSum)
+                    {
+                        message = "Sisestatud isikukood on õige";
+
+                    }
+                    else
+                    {
+                        message = "Sisestatud isikukood on vale!";
+
+                    }
                 }
+                return message;
             }
-            return inputCode;
+            return "Sisestatud isikukoodi pikkus on vale";
 
         }
 

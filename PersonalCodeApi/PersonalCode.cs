@@ -6,6 +6,7 @@ namespace PersonalCodeApi
     {
         [Key]
         public string? Code { get; set; }
-        public string? ErrorMessage { get; set; }
+        public string? Message { get; set; }
+
     }
 }

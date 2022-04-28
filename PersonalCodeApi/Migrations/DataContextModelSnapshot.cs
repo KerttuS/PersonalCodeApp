@@ -9,7 +9,7 @@ using PersonalCodeApi.Data;
 
 namespace PersonalCodeApi.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(IDataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

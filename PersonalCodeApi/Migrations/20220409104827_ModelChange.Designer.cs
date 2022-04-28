@@ -10,7 +10,7 @@ using PersonalCodeApi.Data;
 
 namespace PersonalCodeApi.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(IDataContext))]
     [Migration("20220409104827_ModelChange")]
     partial class ModelChange
     {

@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PersonalCodeApi;
 
 namespace PersonalCodeApi.Data
 {
-    public class DataContext : DbContext
+    public class IDataContext : DbContext
     {  
-        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+        public IDataContext(DbContextOptions<IDataContext> options) : base(options) { }
 
-        public DbSet<PersonalCode> PersonalCodes { get; set; }
+        public DbSet<PersonalCode> PersonalCode { get; set; }
     }
 }
