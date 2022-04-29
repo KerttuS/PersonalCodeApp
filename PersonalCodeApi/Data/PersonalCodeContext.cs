@@ -7,6 +7,6 @@ namespace PersonalCodeApi.Data
     {  
         public IDataContext(DbContextOptions<IDataContext> options) : base(options) { }
 
-        public DbSet<PersonalCode> PersonalCode { get; set; }
+        public DbSet<PersonalCode> PersonalCodes { get; set; }
     }
 }

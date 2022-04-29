@@ -19,7 +19,7 @@ builder.Services.AddCors( options =>
 builder.Services.AddControllers();
 builder.Services.AddDbContext<IDataContext>(options =>
 {
-    options.UseInMemoryDatabase("PersonalCodeDb");
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
