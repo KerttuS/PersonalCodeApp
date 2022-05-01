@@ -30,14 +30,15 @@ namespace PersonalCodeApi.Controllers
 
 
         [HttpPost]
-        public async Task<ActionResult> PostCode(string personalCode)
+        public async Task<ActionResult> PostCode( [FromBody] PersonalCode personCode)
         {
+            string personalCode = personCode.Code.ToString();
 
             try
             {
                 if (personalCode == null)
                 {
-                    return NotFound();
+                    throw new NullReferenceException();
                 }
                 else
                 {
@@ -48,7 +49,7 @@ namespace PersonalCodeApi.Controllers
 
                     _context.Add(personalCodeDb);
                     await _context.SaveChangesAsync();
-
+                    
                     return CreatedAtAction("GetAll", new { id = personalCodeDb.Code }, message);
                 }
 

@@ -1,8 +1,9 @@
 ﻿import { useState } from 'react'
 
-const UserInput = ({ onAdd }) => {
-    const [code, setCode] = useState('')
-   
+const UserInput = ({ onAdd, message }) => {
+    const [code, setCode] = useState('35408012332')
+    const [text, showText] = useState(false)
+
     const handleSubmit = (e) => {
         console.log(code)
         e.preventDefault()
@@ -11,11 +12,13 @@ const UserInput = ({ onAdd }) => {
             return
         }
         onAdd({ code })
-        setCode('')
+
+        showText(true)
     }
     
     return (
         <>
+           
             <form className='add-form' onSubmit={handleSubmit} >
             <div className='form-control' >
                 <label>Isikukood</label>
@@ -27,12 +30,12 @@ const UserInput = ({ onAdd }) => {
                     maxLength='11'
                     onChange={(e) => {
                         setCode((v) => (e.target.validity.valid ? e.target.value : v))
-                    }} />
-           
+                        }} />
+                    <label style={{ color: "blue" }}>{message} {text}</label>
                 </div>
                 <button disabled={code.length < 11} type='submit' className='btn btn-block' value='Kontrolli'>Kontrolli</button>
         </form>
-
+            
             <div>
                 <span className='span' text='Vaata valideerimisi'>Isikukoodi kontrolli tulemused</span>
             </div>

@@ -8,5 +8,10 @@ namespace PersonalCodeApi.Data
         public IDataContext(DbContextOptions<IDataContext> options) : base(options) { }
 
         public DbSet<PersonalCode> PersonalCodes { get; set; }
+
+        public void Get()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
