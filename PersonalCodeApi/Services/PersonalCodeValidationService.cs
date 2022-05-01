@@ -18,11 +18,11 @@ namespace PersonalCodeApi.Services
                 if (inputCode.Length == 11)
                 {
                     char[]? codeToCheck = inputCode.ToCharArray();
-                    int sex = Convert.ToInt32(inputCode.Substring(0, 1));
-                    int month = Convert.ToInt32(inputCode.Substring(3, 2));
-                    int day = Convert.ToInt32(inputCode.Substring(5, 2));
-                    int lastNum = Convert.ToInt32(inputCode.Substring(10, 1));
-
+                    int sex = int.Parse(inputCode.Substring(0, 1));
+                    int month = int.Parse(inputCode.Substring(3, 2));
+                    int day = int.Parse(inputCode.Substring(5, 2));
+                    int lastNum = int.Parse(inputCode.Substring(10, 1));
+                 
                     int checkSum = getCheckSum(codeToCheck);
 
                     if (sex >= 3 && sex <= 6 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && lastNum == checkSum)

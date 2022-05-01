@@ -2,7 +2,7 @@
 
 const UserInput = ({ onAdd, message }) => {
     const [code, setCode] = useState('35408012332')
-    const [text, showText] = useState(false)
+    const [showText, setShowText] = useState(false)
 
     const handleSubmit = (e) => {
         console.log(code)
@@ -11,9 +11,10 @@ const UserInput = ({ onAdd, message }) => {
             alert("Midagi juhtus")
             return
         }
+        
         onAdd({ code })
 
-        showText(true)
+        setShowText(true)
     }
     
     return (
@@ -31,7 +32,7 @@ const UserInput = ({ onAdd, message }) => {
                     onChange={(e) => {
                         setCode((v) => (e.target.validity.valid ? e.target.value : v))
                         }} />
-                    <label style={{ color: "blue" }}>{message} {text}</label>
+                    <label style={{ color: "blue" }}>{message} {showText}</label>
                 </div>
                 <button disabled={code.length < 11} type='submit' className='btn btn-block' value='Kontrolli'>Kontrolli</button>
         </form>

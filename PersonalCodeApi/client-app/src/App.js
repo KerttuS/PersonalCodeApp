@@ -28,13 +28,15 @@ const App = () => {
 
     //Validate personal code 
     const checkCode = async (code) => {
-
+        
+        console.log(code)
         const res = await fetch('https://localhost:7090/api/personalcode', {
             method: "POST", //post
             headers: {
+                Accept: "application/json",
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify(code),
+            body: JSON.stringify( code ),
         });
         const data = await res.text()
         setMessage(data)

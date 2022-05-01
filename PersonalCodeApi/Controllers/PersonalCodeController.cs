@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using static PersonalCodeApi.Services.PersonalCodeValidationService;
 
 namespace PersonalCodeApi.Controllers
@@ -28,10 +29,12 @@ namespace PersonalCodeApi.Controllers
 
         }
 
+                                                                                    
 
         [HttpPost]
         public async Task<ActionResult> PostCode( [FromBody] PersonalCode personCode)
         {
+           
             string personalCode = personCode.Code.ToString();
 
             try

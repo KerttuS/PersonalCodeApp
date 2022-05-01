@@ -8,7 +8,7 @@ using Xunit;
 
 namespace PersonalCodeTests
 {
-    public class ValidtionServiceTests
+    public class ValidationServiceTests
     {
         [Fact]
         public void CodeValidation_ValidationService_RightCodeMessage()
@@ -23,8 +23,8 @@ namespace PersonalCodeTests
         public void CodeValidation_ValidationService_WrongCodeMessage()
         {
             string code = "50809087055";
-            string rightCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
-            Assert.Equal("Sisestatud isikukood on vigane!", rightCodeMessage);
+            string wrongCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
+            Assert.Equal("Sisestatud isikukood on vigane!", wrongCodeMessage);
 
         }
         [Fact]
