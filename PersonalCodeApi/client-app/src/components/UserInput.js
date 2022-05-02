@@ -1,7 +1,7 @@
 ﻿import { useState } from 'react'
 
 const UserInput = ({ onAdd, message }) => {
-    const [code, setCode] = useState('35408012332')
+    const [code, setCode] = useState('')
     const [showText, setShowText] = useState(false)
 
     const handleSubmit = (e) => {
@@ -13,7 +13,6 @@ const UserInput = ({ onAdd, message }) => {
         }
         
         onAdd({ code })
-
         setShowText(true)
     }
     

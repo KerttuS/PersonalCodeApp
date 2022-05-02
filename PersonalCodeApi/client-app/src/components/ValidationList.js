@@ -8,7 +8,7 @@ const ValidateList = ({ list }) => {
             {list.map(item => (
                 <li key={item.code}>
                     <p>{item.code}</p>
-                    <p>{item.Message}</p>
+                    <p>{item.message}</p>
                 </li>
             ))}
         </ul>

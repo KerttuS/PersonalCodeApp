@@ -11,7 +11,7 @@ namespace PersonalCodeTests
     public class ValidationServiceTests
     {
         [Fact]
-        public void CodeValidation_ValidationService_RightCodeMessage()
+        public void CodeValidationReturnRightCodeMessage()
         {
             string code = "50809087054";
             var rightCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
@@ -20,7 +20,7 @@ namespace PersonalCodeTests
         }
 
         [Fact]
-        public void CodeValidation_ValidationService_WrongCodeMessage()
+        public void CodeValidationReturnWrongCodeMessage()
         {
             string code = "50809087055";
             string wrongCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
@@ -28,7 +28,7 @@ namespace PersonalCodeTests
 
         }
         [Fact]
-        public void CodeValidation_ValidationService_CodeNotPresentMessage()
+        public void CodeValidationReturnCodeNotPresentMessage()
         {
             string code = "";
             string checkedCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
@@ -37,7 +37,7 @@ namespace PersonalCodeTests
         }
 
         [Fact]
-        public void CodeValidationLength_ValidationService_CodeCorrectLength()
+        public void CodeValidationCodeHasCorrectLength()
         {
             string code = "50607167024";
             string checkedCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
@@ -45,7 +45,7 @@ namespace PersonalCodeTests
 
         }
         [Fact]
-        public void CodeValidationLength_ValidationService_CodeLengthNotValid()
+        public void CodeValidationCodeLengthNotValid()
         {
             string code = "5060716702";
             string checkedCodeMessage = PersonalCodeValidationService.ValidationResultMessage(code);
