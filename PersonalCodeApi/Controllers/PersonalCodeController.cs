@@ -52,7 +52,7 @@ namespace PersonalCodeApi.Controllers
 
                     _context.Add(personalCodeDb);
                     await _context.SaveChangesAsync();
-                    
+
                     return CreatedAtAction("GetAll", new { id = personalCodeDb.Code }, message);
                 }
 

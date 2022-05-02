@@ -1,4 +1,5 @@
 using DevExpress.Entity.Model.Metadata;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 using PersonalCodeApi;
@@ -22,14 +23,14 @@ namespace PersonalCodeTests
         {
             
             var options = new DbContextOptionsBuilder<IDataContext>().UseInMemoryDatabase(databaseName: "TestDb").Options;
-            _context = new IDataContext(options); 
-            _controller = new PersonalCodeController(_context);
+            _context = new IDataContext(options);
            
+            _controller = new PersonalCodeController(_context);
     
         }
 
         [Fact]
-        public void GetAllPersonalCodes_FromDb_NotNull()
+        public async Task GetAllPersonalCodes_FromDb_NotNull()
         {
              
             _context.PersonalCodes.Add(new PersonalCode()
@@ -37,19 +38,34 @@ namespace PersonalCodeTests
             _context.PersonalCodes.Add(new PersonalCode()
             { Code = "48002010245", Message = "Sisestatud kood on vigane" });
             _context.SaveChanges();
-            var result = _controller.GetAll();
-            Assert.NotNull(result);
-              
+
+            ActionResult<List<PersonalCode>>? actionResult = await _controller.GetAll();
+            ObjectResult? result = (ObjectResult)actionResult.Result;
+            
+            Assert.NotNull(result.Value);
         }
 
         [Fact]
-        public void Post_PersonalCodeToDb_ValidCode()
+        public async Task GetAllPersonalCodes_FromDb_Null()
+        {
+           ActionResult<List<PersonalCode>>? actionResult = await _controller.GetAll();
+           var result = (ObjectResult)actionResult.Result;
+
+           Assert.Empty((System.Collections.IEnumerable)result.Value);
+           Assert.Equal(200, result.StatusCode.GetValueOrDefault());
+        }
+
+        [Fact]
+        public async Task Post_PersonalCodeToDb_ValidCode()
         {
        
             PersonalCode persCode = new PersonalCode{ Code="35408200232" };
-            var result = _controller.PostCode(persCode);
-            Assert.NotNull(result);
+            ActionResult? actionResult = await _controller.PostCode(persCode);
+            var result = (ObjectResult)actionResult;
             
+            Assert.NotNull(result.Value);
+            Assert.Equal("Sisestatud isikukood on õige", result.Value);
+                       
         }
 
 
